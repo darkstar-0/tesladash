@@ -11,19 +11,19 @@ ApplicationWindow {
     visible: true
     color: "black"
 
-    LeftElement {
-        y: 50
-        width: parent.width / 2
-        height: 450
-    }
+    // LeftElement {
+    //     y: 50
+    //     width: parent.width / 2
+    //     height: 450
+    // }
 
-    RightElement {
-        id: rightRect
-        y: 50
-        x: parent.width / 2
-        width: parent.width / 2
-        height: 475
-    }
+    // RightElement {
+    //     id: rightRect
+    //     y: 50
+    //     x: parent.width / 2
+    //     width: parent.width / 2
+    //     height: 475
+    // }
 
 
     QtObject {
@@ -45,7 +45,6 @@ ApplicationWindow {
         source: "/pics/Background.png"
     }
 
-    //Leiste unten
     Rectangle {
         y: parent.height - 90
         height: 200

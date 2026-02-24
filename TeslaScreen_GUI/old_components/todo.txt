@@ -1,0 +1,9 @@
+First:
+add tests via claude code
+clean up
+post PR to github
+
+Feature List:
+change energy flow
+allow total UI changes to styles like the pics i have
+add theme output name to display

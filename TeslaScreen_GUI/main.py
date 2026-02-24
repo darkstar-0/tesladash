@@ -14,7 +14,7 @@ RIGHTSIG_CAN_ID = 0x3E3
 SPPEDLIMIT_CAN_ID = 0x238
 BATTERY_CAN_ID = 0x33A
 
-can_db = cantools.database.load_file("../Model3CAN.dbc")
+can_db = cantools.database.load_file("Model3CAN.dbc")
 
 class Speed(QObject):
     def __init__(self):
@@ -58,7 +58,7 @@ class Gear(QObject):
 class Odo(QObject):
     def __init__(self):
         QObject.__init__(self)
-        self.odometer = "0 km"
+        self.odometer = "0 mi"
         self.bus = Bus(interface='socketcan', channel='can0', bitrate=500000)
         self.message_id = ODO_CAN_ID
         self.notifier = Notifier(self.bus, [self.receive_can_message])

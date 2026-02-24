@@ -3,14 +3,16 @@ import QtQuick.Controls 1.3
 import QtQuick.Window 2.2
 import QtQuick.Dialogs 1.2
 import QtQuick.Layouts 1.1
+import "."
 
 ApplicationWindow {
-    title: qsTr("Tesla Model y Speedometer")
-    width: 800
-    height: 480
+    title: qsTr("Tesla Model Y Dashboard")
+    width: 900
+    height: 310
     visible: true
-    visibility: ApplicationWindow.FullScreen
-    color: "black"
+    visibility: Window.Windowed
+    color: Theme.backgroundAlt
+
     property int needleValue: 0
 
     QtObject {
@@ -25,36 +27,49 @@ ApplicationWindow {
         }
     }
 
-    Image {
-        width: parent.width
-        height: parent.height
-        source: "../pics/Background.png"
+    // Border rectangle wrapper
+    Rectangle {
+	anchors.fill: parent
+        anchors.margins: 0
+        color: "transparent"
+        border.width: 2
+        border.color: Theme.border
+        z: 1000  // Keep border on top
     }
 
-    // Tacho
-    Image {
-        height: parent.height
-        width: height
-        x: (parent.width / 2) - (width / 2)
-        scale: 1.14
-        source: "../pics/Tacho2.png"
-        fillMode: Image.PreserveAspectFit
+    // Keyboard handler for theme switching
+    Item {
+        focus: true
+        anchors.fill: parent
+        Component.onCompleted: forceActiveFocus()
+        Keys.onPressed: {
+            if (event.key === Qt.Key_1) {
+                Theme.currentTheme = "cyberpunk"
+            } else if (event.key === Qt.Key_2) {
+                Theme.currentTheme = "stealth"
+            } else if (event.key === Qt.Key_3) {
+                Theme.currentTheme = "arctic"
+            } else if (event.key === Qt.Key_4) {
+                Theme.currentTheme = "user1"
+            } else if (event.key === Qt.Key_5) {
+                Theme.currentTheme = "chill_2" 
+            } else if (event.key === Qt.Key_6) {
+                Theme.currentTheme = "chill_3" 
+            } else if (event.key === Qt.Key_7) {
+                Theme.currentTheme = "chill_4" 
+            } else if (event.key === Qt.Key_8) {
+                Theme.currentTheme = "chill_5" 
+            } else if (event.key === Qt.Key_9) {
+                Theme.currentTheme = "chill_6" 
+            } else if (event.key === Qt.Key_0) {
+                Theme.currentTheme = "chill_7" 
+            }
+        }
     }
 
     Speedometer {
         id: speedometer
-        height: 525
-        width: height
-        x: (parent.width / 2) - (width / 2)
-        y: (parent.height / 2) - (height / 2)
-    }
-
-    RightElement {
-        id: rightelement
-        height: 125
-        width: height
-        x: 700
-        y: 70
+        anchors.fill: parent
     }
 
     Connections {
@@ -83,13 +98,6 @@ ApplicationWindow {
     }
 
     Connections {
-        target: odometerValue
-        
-        function onOdoChanged(odometer) {
-            speedometer.updateOdometerValue(odometer)
-        }
-    }
-    Connections {
         target: leftSignalValue
         
         function onLeftSignalChanged(leftSignal) {
@@ -106,29 +114,20 @@ ApplicationWindow {
     }
 
     Connections {
-        target: speedLimitValue
-        
-        function onSpeedLimitChanged(speedLimit) {
-            rightelement.updateSpeedLimitValue(speedLimit)
+        target: powerValue
+        function onPowerChanged(power) {
+            speedometer.updatePowerValue(power)
         }
     }
 
-    Connections {
-        target: batteryValue
-        
-        function onBatteryChanged(battery) {
-            rightelement.updateBatteryValue(battery)
-        }
-    }
+    // Timer {
+    //     interval: 1000 // 1 second
+    //     repeat: true
+    //     running: true
 
-    Timer {
-        interval: 1000 // 1 second
-        repeat: true
-        running: true
-
-        onTriggered: {
-            photoPopup.visible = !photoPopup.visible; // Toggle visibility
-        }
-    }
+    //     onTriggered: {
+    //         photoPopup.visible = !photoPopup.visible; // Toggle visibility
+    //     }
+    // }
 }
 

@@ -5,184 +5,132 @@ import QtGraphicalEffects 1.0
 Rectangle {
     color: "transparent"
     signal speedoNeedleValueChanged(int value)
+    border.color: Theme.primary
+    border.width: 2
+    radius: 5
+    anchors.fill: parent
+    anchors.margins: 5
+    clip: true
 
-    SpeedNeedle {
-        id: speedoNeedle
-        property int speedoNeedleValue: 0
-
-        anchors.verticalCenterOffset: 0
-        anchors.centerIn: parent
-        focus: true
-
-        onSpeedoNeedleValueChanged: {
-            speedoNeedle.value = speedoNeedleValue
-            innerring.speed = speedoNeedleValue
-        }
+    EnergyFlow {
+        id: energyFlow
+        powerKW: 0  // Will animate with demo data
+        width: parent.width
+        // height: parent.height - bottomBox.height //+ (parent.height * 0.1)  // Fill from top to just above bottom box
+        height: parent.height
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: bottomBox.height
+        anchors.left: parent.left 
+        // anchors.leftMargin: batteryGauge.width + 100
+        anchors.leftMargin: 0
     }
 
-    InnerRing {
-        id: innerring
+    BottomBox {
+        id: bottomBox
+        width: parent.width
+        height: parent.height * 0.15
+        anchors.bottom: parent.bottom
+    }
+    
+    BatteryGauge {
+        id: batteryGauge
+        batteryLevel: 45  // Will connect to real data later
+        width: 120
+        height: 175 
+        anchors.left: parent.left
+        anchors.leftMargin: 80
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: bottomBox.height + (parent.height * 0.1)
+    }
+
+    SpeedometerDisplay {
+        id: speedDisplay
         speed: 0
-    }
-    Grid {
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height - 150
-        Rectangle {
-            color: "transparent"; width: 25; height: 25
-            Text {
-                id: odometer
-                text: "0"+" Km"
-                font.family: "Eurostile"; font.pixelSize: 16
-                color: "darkgray"
-                anchors.centerIn: parent
-            }
-        }
+        anchors.right: parent.right
+        anchors.rightMargin: 235
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: bottomBox.height + (parent.height * 0.1)
+        z: 10  // Put speed on top of the arc
     }
 
-    Grid {
-        anchors.horizontalCenter: parent.horizontalCenter
-        y: parent.height - 100
-        columns: 4
-        Rectangle {
-            color: "transparent"; width: 25; height: 25
-            Text {
-                id: letterP
-                text: " P "
-                font.family: "Eurostile"; font.pixelSize: 36
-                color: "white"
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            color: "transparent"; width: 25; height: 25
-            Text {
-                id: letterR
-                text: " R "
-                font.family: "Eurostile"; font.pixelSize: 18
-                color: "darkgray"
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            color: "transparent"; width: 25; height: 25
-            Text {
-                id: letterN
-                text: " N "
-                font.family: "Eurostile"; font.pixelSize: 18
-                color: "darkgray"
-                anchors.centerIn: parent
-            }
-        }
-        Rectangle {
-            color: "transparent"; width: 25; height: 25
-            Text {
-                id: letterD
-                text: " D "
-                font.family: "Eurostile"; font.pixelSize: 18
-                color: "darkgray"
-                anchors.centerIn: parent
-            }
-        }
+    GearGauge {
+        id: gearGauge
+        width: 120
+        height: 175
+        anchors.right: parent.right
+        anchors.rightMargin: 80
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: bottomBox.height + (parent.height * 0.1)
+    }
+
+    // TopBox {
+    //     id: topBox
+    //     width: parent.width
+    //     height: parent.height * 0.15
+    //     anchors.top: parent.top
+    // }
+    // Turn Signal - Left
+    Image {
+        id: turnLeftOffOn
+        source: ""
+        anchors.left: parent.left
+        anchors.leftMargin: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        width: 40
+        height: 40
+    }
+
+    // Turn Signal - Right
+    Image {
+        id: turnRightOffOn
+        source: ""
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.top: parent.top
+        anchors.topMargin: 20
+        width: 40
+        height: 40
     }
 
     function park() {
-        // Parking ON
-        letterP.font.bold = true
-        letterP.color = "white"
-        letterP.font.pixelSize = 36
-        // Reverse OFF
-        letterR.font.bold = false
-        letterR.color = "darkgray"
-        letterR.font.pixelSize = 18
-        // Neutral OFF
-        letterN.font.bold = false
-        letterN.color = "darkgray"
-        letterN.font.pixelSize = 18
-        // Drive OFF
-        letterD.font.bold = false
-        letterD.color = "darkgray"
-        letterD.font.pixelSize = 18
+        gearGauge.setGear("DI_GEAR_P")
     }
 
-   function reverse() {
-        // Parking OFF
-        letterP.font.bold = false
-        letterP.color = "darkgray"
-        letterP.font.pixelSize = 18
-        // Reverse ON
-        letterR.font.bold = true
-        letterR.color = "white"
-        letterR.font.pixelSize = 36
-        // Neutral OFF
-        letterN.font.bold = false
-        letterN.color = "darkgray"
-        letterN.font.pixelSize = 18
-        // Drive OFF
-        letterD.font.bold = false
-        letterD.color = "darkgray"
-        letterD.font.pixelSize = 18
+    function reverse() {
+        gearGauge.setGear("DI_GEAR_R")
     }
 
     function neutral() {
-        // Parking OFF
-        letterP.font.bold = false
-        letterP.color = "darkgray"
-        letterP.font.pixelSize = 18
-        // Reverse OFF
-        letterR.font.bold = false
-        letterR.color = "darkgray"
-        letterR.font.pixelSize = 18
-        // Neutral ON
-        letterN.font.bold = true
-        letterN.color = "white"
-        letterN.font.pixelSize = 36
-        // Drive OFF
-        letterD.font.bold = false
-        letterD.color = "darkgray"
-        letterD.font.pixelSize = 18
+        gearGauge.setGear("DI_GEAR_N")
     }
 
-    function drive() {   
-        // Parking OFF
-        letterP.font.bold = false
-        letterP.color = "darkgray"
-        letterP.font.pixelSize = 18
-        // Reverse OFF
-        letterR.font.bold = false
-        letterR.color = "darkgray"
-        letterR.font.pixelSize = 18
-        // Neutral OFF
-        letterN.font.bold = false
-        letterN.color = "darkgray"
-        letterN.font.pixelSize = 18
-        // Drive ON
-        letterD.font.bold = true
-        letterD.color = "white"
-        letterD.font.pixelSize = 36
+    function drive() {
+        gearGauge.setGear("DI_GEAR_D")
     }
     
     function updateSpeedoNeedleValue(value) {
-        speedoNeedle.speedoNeedleValue = value
+        speedDisplay.speed = value
         speedoNeedleValueChanged(value)
-    }
-
-    function updateOdometerValue(value) {
-        odometer.text = value
     }
 
     function leftSignalChange(leftSignal) {
         if (leftSignal === "LIGHT_ON") {
-            innerring.leftSignalOn();
+            turnLeftOffOn.source = "pics/turnLeftOn.png"
         } else if (leftSignal === "LIGHT_OFF") {
-            innerring.leftSignalOff();
+            turnLeftOffOn.source = ""
         }
     }
 
     function rightSignalChange(rightSignal) {
         if (rightSignal === "LIGHT_ON") {
-            innerring.rightSignalOn();
+            turnRightOffOn.source = "pics/turnRightOn.png"
         } else if (rightSignal === "LIGHT_OFF") {
-            innerring.rightSignalOff();
+            turnRightOffOn.source = ""
         }
+    }
+
+    function updatePowerValue(value) {
+        energyFlow.powerKW = value
     }
 }
