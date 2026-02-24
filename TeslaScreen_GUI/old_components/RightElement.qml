@@ -33,34 +33,8 @@ Rectangle {
         source: ""
     }
 
-    Image {
-        id: batteryimg
-        y: 10
-        x: 5
-        scale: 0.5
-        source: "/home/tomas7470/Downloads/Tesla/pics/Battery.png"
-    }
-
-    Text {
-        id: battery
-        y: 22
-        // x: -55
-        font.family: "Eurostile"; color: "white"; font.pixelSize: 14; font.bold: true
-        text: ""
-    }
-
     function updateSpeedLimitValue(value) {
         speedLimit.source = "/home/tomas7470/Downloads/Tesla/pics/"+value+".png"
-    }
-
-    function updateBatteryValue(value) {
-        if (value === 100) {
-            battery.text = value+"%"
-            battery.x = -20
-        } else {
-            battery.text = value+"%"
-            battery.x = -15
-        }
     }
 
     // Timer {
